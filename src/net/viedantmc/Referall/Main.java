@@ -26,63 +26,51 @@ public class Main extends JavaPlugin {
 	  public static LuckPerms api = null;
 	  public static HashMap<UUID, PermissionAttachment> perms = new HashMap<UUID, PermissionAttachment>();
 
-	  
+
 	  @Override
 	  public void onEnable() {
 		  saveDefaultConfig();
 		    this.data = new DataManager(this);
 		    this.rewards = new RewardsManager(this);
 		    this.playtime = new PlaytimeManager(this);
-//		    BukkitScheduler scheduler = getServer().getScheduler();
-//		    scheduler.scheduleSyncRepeatingTask((Plugin)this, new Runnable() {
-//		          public void run() {
-//		            Main.this.trackPlaytime();
-//		          }
-//		        },  0L, 20L);
-		    
 	  }
-	  
+
 	  @Override
 	  public void onDisable() {}
-	  
-
-	  
-	  
-	 
 	  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		  Player player = (Player) sender;
 		  PermissionAttachment attachment = player.addAttachment(this);
 		  perms.put(player.getUniqueId(), attachment);
 		  PermissionAttachment pperms = perms.get(player.getUniqueId());
-		  
+
 		  int secondsPlayed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
-			if(label.equalsIgnoreCase("invited") && sender.hasPermission("referal.invited")){
+			if(label.equalsIgnoreCase("invited") && sender.hasPermission("referral.invited")){
 				if(sender instanceof Player) {
 					if(secondsPlayed > 2700 && secondsPlayed < 10800) {
 					if(args.length != 0) {
-						if (!this.getConfig().contains(args[0] + ".referals")) {
-							this.getConfig().createSection(args[0]+ ".referals");
-							this.getConfig().set(args[0] + ".referals", 0);
-							
+						if (!this.getConfig().contains(args[0] + ".referrals")) {
+							this.getConfig().createSection(args[0]+ ".referrals");
+							this.getConfig().set(args[0] + ".referrals", 0);
+
 						}
-						this.getConfig().set(args[0] + ".referals", this.getConfig().getInt(args[0] + ".referals") + 1);
+						this.getConfig().set(args[0] + ".referals", this.getConfig().getInt(args[0] + ".referrals") + 1);
 						saveConfig();
 						sender.sendMessage("Passed 1");
-						player.isPermissionSet("referal.invited");
-						perms.get(player.getUniqueId()).unsetPermission("referal.invited");
-						return true;	
+						player.isPermissionSet("referral.invited");
+						perms.get(player.getUniqueId()).unsetPermission("referral.invited");
+						return true;
 					}
 					sender.sendMessage("You must put in a username!");
 					sender.sendMessage("Passed 3");
-					return true; 
+					return true;
 				}
 				}
 				sender.sendMessage("Console cannot run this command");
-				return true;	
+				return true;
 			}
 			sender.sendMessage("Failed");
 			return false;
-	  }	  
+	  }
 	  public void onJoin(PlayerJoinEvent p) {
 		  Player player = (Player) p;
 		  String playername = player.getName();
@@ -91,11 +79,10 @@ public class Main extends JavaPlugin {
 		  PermissionAttachment pperms = perms.get(player.getUniqueId());
 		  Set<String> keys = this.rewards.getConfig().getKeys(false);
 		  for (String key : keys) {
-		  if (this.data.getConfig().getInt(playername + ".referals") == this.rewards.getConfig().getInt(key + ".referals")){
+		  if (this.data.getConfig().getInt(playername + ".referrals") == this.rewards.getConfig().getInt(key + ".referrals")){
 			  pperms.setPermission(this.rewards.getConfig().getString(key + "permission"), true);
 		  }
 		  }
-		  
-	  } 
-}
 
+	  }
+}
