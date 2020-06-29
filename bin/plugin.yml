@@ -1,0 +1,7 @@
+main: net.viedantmc.Referall.Main
+author: Blazin_
+version: 1.0
+name: Referals
+
+commands:
+  invited:
